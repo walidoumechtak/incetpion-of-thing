@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  
+  # Server machine
+  config.vm.define "woumechtS" do |server|
+    server.vm.hostname = "woumechtS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.provider "virtualbox" do |vb|
+      vb.name = "woumechtS"
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+    server.vm.provision "shell", path: "scripts/install_k3s_server.sh"
+  end
+
+  # Worker machine
+  config.vm.define "woumechtSW" do |worker|
+    worker.vm.hostname = "woumechtSW"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "woumechtSW"
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+    worker.vm.provision "shell", path: "scripts/install_k3s_worker.sh"
+  end
+end
